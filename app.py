@@ -66,11 +66,15 @@ if auth_status:
         live_df['anomaly_score'] = scores
         live_df['row_index'] = np.arange(len(live_df))
 
-        # 🗓️ Choose a timestamp directly
-        timestamp = st.selectbox("📅 Select Datetime", options=live_df.index)
+        # 🗓️ Let user pick a datetime from calendar
+        selected_datetime = st.datetime_input("📅 Select Datetime", value=live_df.index[0])
 
-        # 🔢 Map timestamp back to row index
-        index = live_df.index.get_loc(timestamp)
+        # 🔢 Safely map to row index (if it exists)
+        if selected_datetime in live_df.index:
+            index = live_df.index.get_loc(selected_datetime)
+        else:
+            st.warning("Selected datetime not found in dataset.")
+            st.stop()
 
         #index = st.number_input("🔢 Select row index", min_value=0, max_value=len(live_df)-1, value=0)
         selected_feature = st.selectbox("📊 Select feature to visualize", features)
