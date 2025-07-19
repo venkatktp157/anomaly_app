@@ -28,6 +28,10 @@ if auth_status:
     
     authenticator.logout('Logout', 'main')
 
+    st.title("📈 Time Series Anomaly Detection with SHAP")
+    st.write(f"Welcome *{name}* 👋")
+    logger.info(f"User {username} logged in successfully")
+
     # === Load trained pipeline ===
     try:
         model_path = os.path.join(os.path.dirname(__file__), "Anomaly", "iforest_shap_timeseries.pkl")
@@ -36,11 +40,6 @@ if auth_status:
     except FileNotFoundError:
         st.error("❌ Model file not found. Please ensure 'iforest_shap_timeseries.pkl' is in the Anomaly folder.")
         st.stop()
-
-    st.set_page_config(layout="wide")
-    st.title("📈 Time Series Anomaly Detection with SHAP")
-    st.write(f"Welcome *{name}* 👋")
-    logger.info(f"User {username} logged in successfully")
 
     model = assets['model']
     scaler = assets['scaler']
