@@ -66,10 +66,18 @@ if auth_status:
         live_df['anomaly_score'] = scores
         live_df['row_index'] = np.arange(len(live_df))
 
-        # 🗓️ Let user pick a datetime from calendar
-        selected_datetime = st.datetime_input("📅 Select Datetime", value=live_df.index[0])
+        import datetime
 
-        # 🔢 Safely map to row index (if it exists)
+        # 🗓️ Date picker
+        selected_date = st.date_input("📅 Select Date", value=live_df.index[0].date())
+
+        # ⏰ Time picker
+        selected_time = st.time_input("⏰ Select Time", value=live_df.index[0].time())
+
+        # 🧠 Combine into full datetime
+        selected_datetime = datetime.datetime.combine(selected_date, selected_time)
+
+        # 🔢 Map to index
         if selected_datetime in live_df.index:
             index = live_df.index.get_loc(selected_datetime)
         else:
