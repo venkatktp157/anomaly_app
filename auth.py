@@ -1,15 +1,19 @@
 import streamlit_authenticator as stauth
-import yaml
-from yaml.loader import SafeLoader
+import streamlit as st
 
 def load_authenticator():
-    with open('config.yaml') as file:
-        config = yaml.load(file, Loader=SafeLoader)
-
-    authenticator = stauth.Authenticate(
-        config['credentials'],
-        config['cookie']['name'],
-        config['cookie']['key'],
-        config['cookie']['expiry_days']
+    config = {
+        "credentials": {
+            "usernames": {
+                key: dict(st.secrets[f"credentials.usernames.{key}"])
+                for key in st.secrets["credentials.usernames"].keys()
+            }
+        },
+        "cookie": dict(st.secrets["cookie"])
+    }
+    return stauth.Authenticate(
+        config["credentials"],
+        config["cookie"]["name"],
+        config["cookie"]["key"],
+        config["cookie"]["expiry_days"]
     )
-    return authenticator

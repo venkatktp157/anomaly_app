@@ -14,4 +14,7 @@ Thumbs.db
 .env
 
 # Streamlit cache
-.streamlit/
+.streamlit/secrets.toml
+
+
+
