@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -26,6 +27,16 @@ if auth_status:
             st.stop()  # ⛔ Stop app flow until re-login
     
     authenticator.logout('Logout', 'main')
+
+    # === Load trained pipeline ===
+    try:
+        model_path = os.path.join(os.path.dirname(__file__), "Anomaly", "iforest_shap_timeseries.pkl")
+        with open(model_path, "rb") as f:
+            assets = pickle.load(f)
+    except FileNotFoundError:
+        st.error("❌ Model file not found. Please ensure 'iforest_shap_timeseries.pkl' is in the Anomaly folder.")
+        st.stop()
+
     st.set_page_config(layout="wide")
     st.title("📈 Time Series Anomaly Detection with SHAP")
     st.write(f"Welcome *{name}* 👋")
