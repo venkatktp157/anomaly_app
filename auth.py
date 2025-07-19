@@ -1,21 +1,27 @@
-import streamlit_authenticator as stauth
-import streamlit as st
-
 def load_authenticator():
-    config = {
-        "credentials": {
-            "usernames": {
-                key: dict(st.secrets[f"credentials.usernames.{key}"])
-                for key in st.secrets["credentials.usernames"].keys()
-            }
-        },
-        "cookie": dict(st.secrets["cookie"])
-    }
-    return stauth.Authenticate(
-        config["credentials"],
-        config["cookie"]["name"],
-        config["cookie"]["key"],
-        config["cookie"]["expiry_days"]
-    )
+    import streamlit_authenticator as stauth
+    import streamlit as st
 
-st.write("Available secrets:", st.secrets.keys())
+    # Dynamically extract all keys starting with "credentials.usernames."
+    user_keys = [
+        key.split(".")[-1]
+        for key in st.secrets.keys()
+        if key.startswith("credentials.usernames.")
+    ]
+
+    usernames = {
+        uname: dict(st.secrets[f"credentials.usernames.{uname}"])
+        for uname in user_keys
+    }
+
+    cookie = dict(st.secrets["cookie"])
+
+    st.write("Available keys:", list(st.secrets.keys()))
+
+    return stauth.Authenticate(
+        {"usernames": usernames},
+        cookie["name"],
+        cookie["key"],
+        cookie["expiry_days"]
+    )
+    
