@@ -42,14 +42,6 @@ if auth_status:
     st.write(f"Welcome *{name}* 👋")
     logger.info(f"User {username} logged in successfully")
 
-    # === Load trained pipeline ===
-    try:
-        with open("Anomaly/iforest_shap_timeseries.pkl", "rb") as f:
-            assets = pickle.load(f)
-    except FileNotFoundError:
-        st.error("❌ Model file not found. Please ensure 'iforest_shap_timeseries.pkl' is in the Anomaly folder.")
-        st.stop()
-
     model = assets['model']
     scaler = assets['scaler']
     explainer = assets['explainer']
