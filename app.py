@@ -72,7 +72,7 @@ if auth_status:
 
         tab1, tab2 = st.tabs(["📈 Feature Plot", "🧠 SHAP Explanation"])
         tab1.plotly_chart(plot_feature(live_df, selected_feature), use_container_width=True)
-        render_shap_tab(shap_vals, features, index, timestamp, tab2)
+        render_shap_tab(shap_vals, features, index, live_df, tab2)
 
 elif auth_status == False:
     st.error("Username/password is incorrect ❌")
