@@ -1,0 +1,17 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Logs and data
+user_activity.log
+*.pkl
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Env and secrets
+.env
+
+# Streamlit cache
+.streamlit/
