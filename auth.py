@@ -17,3 +17,5 @@ def load_authenticator():
         config["cookie"]["key"],
         config["cookie"]["expiry_days"]
     )
+
+st.write("Available secrets:", st.secrets.keys())
