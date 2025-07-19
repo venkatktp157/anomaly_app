@@ -31,11 +31,15 @@ def plot_feature(df, feature, anomaly_col='anomaly'):
     )
     return fig
 
-def plot_shap(shap_values, features, index, timestamp):
+def plot_shap(shap_values, features, index, df):
+    timestamp = df.index[index]
+
     shap_df = pd.DataFrame({
         'Feature': features,
-        'SHAP Value': shap_values[index]
-    }).sort_values('SHAP Value', key=abs, ascending=True)
+        'SHAP Value': shap_values[index],
+        'Row Index': index,         # Tooltip reference
+        'Timestamp': timestamp      # Visible on axis or hover
+    })
 
     shap_df['SHAP Value'] = shap_df['SHAP Value'].round(3)
 
@@ -46,10 +50,14 @@ def plot_shap(shap_values, features, index, timestamp):
         orientation='h',
         color='SHAP Value',
         color_continuous_scale='RdBu',
-        title=f"SHAP Explanation for Index {index} (Datetime: {timestamp})"
+        title=f"SHAP Explanation (Datetime: {timestamp})",
+        hover_data=['Row Index']
     )
+
     fig.update_layout(
         xaxis_title="SHAP Value",
         yaxis_title="Feature"
     )
+
     return fig
+
