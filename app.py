@@ -66,7 +66,13 @@ if auth_status:
         live_df['anomaly_score'] = scores
         live_df['row_index'] = np.arange(len(live_df))
 
-        index = st.number_input("🔢 Select row index", min_value=0, max_value=len(live_df)-1, value=0)
+        # 🗓️ Choose a timestamp directly
+        timestamp = st.selectbox("📅 Select Datetime", options=live_df.index)
+
+        # 🔢 Map timestamp back to row index
+        index = live_df.index.get_loc(timestamp)
+
+        #index = st.number_input("🔢 Select row index", min_value=0, max_value=len(live_df)-1, value=0)
         selected_feature = st.selectbox("📊 Select feature to visualize", features)
         timestamp = live_df.index[index]
 
