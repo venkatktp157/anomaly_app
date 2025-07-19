@@ -37,8 +37,8 @@ def plot_shap(shap_values, features, index, df):
     shap_df = pd.DataFrame({
         'Feature': features,
         'SHAP Value': shap_values[index],
-        'Row Index': index,         # Tooltip reference
-        'Timestamp': timestamp      # Visible on axis or hover
+        'Row Index': [index] * len(features), # Tooltip reference
+        'Timestamp': [timestamp] * len(features) # Visible on axis or hover
     })
 
     shap_df['SHAP Value'] = shap_df['SHAP Value'].round(3)
