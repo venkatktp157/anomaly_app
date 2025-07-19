@@ -3,29 +3,19 @@ import streamlit_authenticator as stauth
 import bcrypt
 
 def load_authenticator():
-    # 🔍 Step 1: Extract usernames from secrets
-    user_keys = [
-        key.split(".")[-1]
-        for key in st.secrets.keys()
-        if key.startswith("credentials.usernames.")
-    ]
+    # ✅ Nested access (compatible with Streamlit Secrets)
+    usernames = st.secrets["credentials"]["usernames"]
+    cookie = st.secrets["cookie"]
 
-    usernames = {
-        uname: dict(st.secrets[f"credentials.usernames.{uname}"])
-        for uname in user_keys
-    }
-
-    cookie = dict(st.secrets["cookie"])
-
-    # 🔐 Step 2: Create authenticator instance
+    # 🔐 Authenticator instance
     authenticator = stauth.Authenticate(
-        {"usernames": usernames},
+        {"usernames": dict(usernames)},
         cookie["name"],
         cookie["key"],
         cookie["expiry_days"]
     )
 
-    # 🧪 Optional Debug Mode (dev only)
+    # 🧪 Optional Auth Debug Mode (for dev/testing only)
     if st.sidebar.checkbox("Enable Auth Debug Mode"):
         st.write("Available usernames:", list(usernames.keys()))
 
@@ -36,6 +26,6 @@ def load_authenticator():
             hashed_pw = usernames[selected_user]["password"]
             match = bcrypt.checkpw(test_password.encode(), hashed_pw.encode())
 
-            st.success("✅ Password matches!" if match else "❌ Incorrect password for user")
+            st.success("✅ Password matches!" if match else "❌ Incorrect password for selected user")
 
     return authenticator
